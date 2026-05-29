@@ -15,8 +15,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final _accountController = TextEditingController();
 
   void _verify() async {
-    if (_trxController.text.isEmpty) return;
-    final result = await context.read<AppProvider>().verifyTrx(_trxController.text);
+    String trxId = _trxController.text.trim();
+    if (trxId.isEmpty) return;
+    
+    // Extract ID if it's a URL
+    trxId = _extractTrxId(trxId);
+    
+    final result = await context.read<AppProvider>().verifyTrx(trxId);
     if (!mounted) return;
 
     if (result != null && result['success']) {
@@ -60,6 +65,42 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  String _extractTrxId(String input) {
+    if (input.isEmpty) return input;
+    
+    try {
+      // Handle Telebirr & Dashen (URL with ID at the end)
+      if (input.contains('/receipt/')) {
+        return input.split('/receipt/').last.split('?').first.trim();
+      }
+      
+      // Handle CBE & Abyssinia (URL with ?id=...)
+      if (input.contains('?id=') || input.contains('&id=')) {
+        final uri = Uri.parse(input);
+        String idValue = uri.queryParameters['id'] ?? '';
+        
+        // Specific fix for CBE: remove last 8 digits (which are other values, not part of the TRX ID)
+        if (input.contains('cbe.com.et') && idValue.length > 8) {
+          return idValue.substring(0, idValue.length - 8);
+        }
+        
+        return idValue.isNotEmpty ? idValue : input;
+      }
+      
+      // Handle generic URLs (last path segment)
+      if (input.startsWith('http')) {
+        final uri = Uri.parse(input);
+        if (uri.pathSegments.isNotEmpty) {
+          return uri.pathSegments.last;
+        }
+      }
+    } catch (e) {
+      debugPrint('QR parsing error: $e');
+    }
+    
+    return input.trim();
   }
 
   Widget _infoRow(String label, String value) {
@@ -111,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (result != null) {
-      _trxController.text = result;
+      _trxController.text = _extractTrxId(result);
       _verify();
     }
   }
