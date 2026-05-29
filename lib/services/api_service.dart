@@ -5,17 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 
 class ApiService {
-  static String get baseUrl {
-    // For Web and Desktop, use localhost
-    if (kIsWeb || 
-        defaultTargetPlatform == TargetPlatform.linux || 
-        defaultTargetPlatform == TargetPlatform.macOS || 
-        defaultTargetPlatform == TargetPlatform.windows) {
-      return 'http://localhost:3000';
-    }
-    // For Android Emulator: 10.0.2.2
-    return 'http://10.0.2.2:3000'; 
-  }
+  static const String baseUrl = 'https://sas-backend.up.railway.app';
 
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
