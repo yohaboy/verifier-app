@@ -15,3 +15,15 @@
 * **⌨️ Manual Verification:** Quick fallback to manually input reference/transaction IDs when a camera isn't viable.
 * **🛡️ Fraud Prevention:** Cross-checks transaction details to eliminate the risk of fake or photoshopped payment screenshots.
 * **⚡ Offline Validation Logic:** Built-in pattern verification algorithms run locally to flag invalid reference formats instantly without wasting data.
+
+* 👥 Development Team
+
+    1. Lisan Gebretensay
+
+    2. Tola Anbesu
+
+    3. Yohannes Gizaw
+
+    4. Nathnael Hailemariam
+
+🏛️ Addis Ababa University 🎓 Department of Computer Science 📅 2026
