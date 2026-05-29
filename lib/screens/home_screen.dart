@@ -46,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const Text('Transaction Details:', style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
-                _infoRow('Amount', '${data['amount']} ETB'),
-                _infoRow('Payer', data['payer_name']),
-                _infoRow('Date', data['createdAt']?.toString().split('T')[0] ?? 'N/A'),
+                _infoRow('Amount', '${data['transaction']?['amount'] ?? 'N/A'} ETB'),
+                _infoRow('Payer', data['transaction']?['senderAccount']?.toString() ?? 'Anonymous'),
+                _infoRow('Date', data['transaction']?['createdAt']?.toString().split('T')[0] ?? 'N/A'),
               ],
             )
           : Text(data.toString()),

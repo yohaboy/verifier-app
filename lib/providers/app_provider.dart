@@ -102,7 +102,7 @@ class AppProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final accounts = data['data']['accounts'] as List;
-        _cbeAccounts = accounts.where((a) => (a['provider'] as String).toLowerCase() == 'cbe').toList();
+        _cbeAccounts = accounts.where((a) => (a['provider']?.toString().toLowerCase() ?? '') == 'cbe').toList();
       }
     } catch (e) {
       debugPrint('Fetch accounts error: $e');
